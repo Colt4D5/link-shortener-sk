@@ -1,2 +1,6 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+  import NewNote from "./NewNote.svelte";
+</script>
+
+<h1>Welcome to pas<span class="color__svelte">SV</span>ord</h1>
+<NewNote />
