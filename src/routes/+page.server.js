@@ -1,6 +1,16 @@
 import db from '$db/mongo'
 import shortid from 'shortid';
 
+export const load = async () => {
+  const notes = await db.collection('links').find().toArray();
+
+  notes.map(note => delete note._id );
+  
+  return {
+    notes
+  };
+}
+
 export const actions = {
   default: async ({ request }) => {
     const { title, website, username, password, passwordHint, comments } = await request.json();
