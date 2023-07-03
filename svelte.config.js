@@ -10,6 +10,7 @@ const config = {
       '$db': '/src/lib/db',
       '$lib': '/src/lib',
       '$src': '/src',
+      '$utils': 'src/lib/utils',
     }
   },
 

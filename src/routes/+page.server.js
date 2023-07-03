@@ -1,13 +1,20 @@
 import db from '$db/mongo'
 import shortid from 'shortid';
+import { redirect } from '@sveltejs/kit';
 
-export const load = async () => {
-  const notes = await db.collection('links').find().toArray();
+export const load = async ({ locals }) => {
+  const username = locals.username;
+  const loggedIn = locals.loggedIn;
 
-  notes.map(note => delete note._id );
-  
+  const user = await db.collection('users')
+    .findOne({ 'username': username })
+    
+  if (!username || !loggedIn || !user) {
+    throw redirect(302, '/login');
+  }
+
   return {
-    notes
+    notes: user.savedLogins
   };
 }
 

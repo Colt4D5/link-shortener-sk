@@ -35,7 +35,7 @@
         {/if}
       </div>
       <div class="note-title">
-        <p>{i + 1}. {note.title}<br><span class="note-url">{note.website}</span></p>
+        <p>{i + 1}. {note.title}<br><span class="note-url">{note.url}</span></p>
       </div>
     </div>
   {/each}
@@ -44,8 +44,14 @@
 <style lang="postcss">
   #notes {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: min(100%, 300px);
     grid-gap: 1rem;
+    @media (min-width: 40em) {
+      grid-template-columns: repeat(3, 33.3333%);
+    }
+    @media (min-width: 64em) {
+      grid-template-columns: repeat(4, 25%);
+    }
     &.isIsolating {
       & .note {
         opacity: 0.2;
@@ -54,7 +60,7 @@
         }
         &:not(.isIsolated) {
           & .qr-code img {
-            filter: brightness(0.1);
+            filter: brightness(0.05);
           }
         }
       }
@@ -67,9 +73,6 @@
       transition: opacity 0.5s ease;
       & .isolation {
         margin-bottom: 1rem;
-      }
-      & span.note-url {
-        color: #666;
       }
       & .qr-code {
         cursor: pointer;
@@ -93,6 +96,18 @@
       }
       & .note-title {
         margin-top: 1rem;
+        & p {
+          display: flex;
+          flex-direction: column;
+        }
+        & span.note-url {
+          flex: 1;
+          color: #666;
+          width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
     }
   }
