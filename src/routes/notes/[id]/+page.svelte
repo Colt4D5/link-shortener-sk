@@ -1,10 +1,29 @@
 <script>
+	import { invalidateAll } from '$app/navigation';
   import toast from 'svelte-french-toast';
+  import EditModal from './EditModal.svelte';
   export let data;
-  const link = data.link;
+  const { user, link } = data;
 
-  const copyToClipboard = (e) => {
-    navigator.clipboard.writeText(e.target.textContent);
+  let isEditing = false;
+
+  let field;
+  let fieldValue;
+
+  const editField = async (e) => {
+    field = e.target.dataset.field;
+    fieldValue = e.target.dataset.fieldValue;
+
+    isEditing = true;
+  }
+
+  const closeDialog = () => {
+    isEditing = false;
+    invalidateAll();
+  }
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
     toast('Successfully Copied Text!', {
       icon: '📋'
     })
@@ -17,31 +36,50 @@
   <div class="left">
     <div class="row">
       <strong>URL:</strong>
-      <a href={link.url}>{link.url}</a>
-      <button>Edit</button>
+      <span><a href={link.url} target="_blank">{link.url}</a></span>
+      <div class="controls">
+        <button tabindex="-1" on:keypress={() => copyToClipboard(link.url)} on:click={() => copyToClipboard(link.url)}>Copy</button>
+        <button data-field="url" data-field-value={link.url} on:click={editField}>Edit</button>
+      </div>
     </div>
     
     <div class="row">
       <strong>Username/Email:</strong>
-      <span on:click={copyToClipboard}>{link.username}</span>
-      <button>Edit</button>
+      <span>{link.username}</span>
+      <div class="controls">
+        <button tabindex="-1" on:keypress={() => copyToClipboard(link.username)} on:click={() => copyToClipboard(link.username)}>Copy</button>
+        <button data-field="username" data-field-value={link.username} on:click={editField}>Edit</button>
+      </div>
     </div>
     
     <div class="row">
       <strong>Password:</strong>
-      <span on:click={copyToClipboard}>{link.password}</span>
-      <button>Edit</button>
+      <span>{link.password}</span>
+      <div class="controls">
+        <button tabindex="-1" on:keypress={() => copyToClipboard(link.password)} on:click={() => copyToClipboard(link.password)}>Copy</button>
+        <button data-field="password" data-field-value={link.password} on:click={editField}>Edit</button>
+      </div>
     </div>
     
     {#if link.passwordHint }
       <div class="row">
-        <strong>Password Hint:</strong> {link.passwordHint}
+        <strong>Password Hint:</strong>
+        <span>{link.passwordHint}</span>
+        <div class="controls">
+          <button tabindex="-1" on:keypress={() => copyToClipboard(link.passwordHint)} on:click={() => copyToClipboard(link.passwordHint)}>Copy</button>
+          <button data-field="passwordHint" data-field-value={link.passwordHint} on:click={editField}>Edit</button>
+        </div>
       </div>
     {/if}
-      
+    
     {#if link.comments }
       <div class="row">
-        <strong>Comments:</strong> {link.comments}
+        <strong>Comments:</strong> 
+        {link.comments}
+        <div class="controls">
+          <button tabindex="-1" on:keypress={() => copyToClipboard(link.comments)} on:click={() => copyToClipboard(link.comments)}>Copy</button>
+          <button data-field="comments" data-field-value={link.comments} on:click={editField}>Edit</button>
+        </div>
       </div>  
     {/if}
   </div>
@@ -52,6 +90,10 @@
     </div>
   </div>
 </div>
+
+{#if isEditing }
+  <EditModal {user} id={link.id} field={field} fieldValue={fieldValue} {closeDialog} />
+{/if}
 
 <style lang="postcss">
   #deets {
@@ -74,9 +116,15 @@
         &:not(:last-of-type) {
           margin-bottom: 0.5rem;
         }
-        & button {
-          max-width: 100px;
-          margin: 0;
+        & .controls {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 0.25rem;
+          & button {
+            max-width: 100px;
+            margin: 0;
+          }
         }
       }
     }

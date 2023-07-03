@@ -11,8 +11,6 @@ export async function POST({ request }) {
   try {
     const currentUser = await db.collection('users').findOne({ 'username': user });
 
-    console.log(currentUser);
-
     if (!currentUser) {
       const response = new Response(JSON.stringify({ 
         error: 'User not found' ,
@@ -20,7 +18,6 @@ export async function POST({ request }) {
       }), {
         headers: { 'Content-Type': 'application/json' }
       });
-      console.log('whoopsie!');
       return response;
     }
 
@@ -32,8 +29,8 @@ export async function POST({ request }) {
           url,
           username,
           password,
-          passwordHint,
-          comments
+          passwordHint: passwordHint || '',
+          comments: comments || ''
         }
       }
     });
@@ -42,7 +39,6 @@ export async function POST({ request }) {
       message: 'Form data saved successfully' ,
       status: 201
     };
-    console.log('success!');
     return new Response(JSON.stringify(response), {
       headers: { 'Content-Type': 'application/json' }
     });
@@ -53,7 +49,6 @@ export async function POST({ request }) {
     }), {
       headers: { 'Content-Type': 'application/json' }
     });
-    console.log('whoopsie!');
     return response;
   }
 

@@ -19,6 +19,7 @@ export async function load({ params, locals }) {
 		const link = user.savedLogins.find(savedLogin => savedLogin.id === id);
 
 		return {
+			user: user.username,
 			link
 		}
 	} catch (error) {

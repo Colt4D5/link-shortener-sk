@@ -1,6 +1,5 @@
 <script>
   import { invalidateAll, goto } from '$app/navigation';
-  import { applyAction } from '$app/forms';
   import toast from 'svelte-french-toast';
   export let data;
 
@@ -19,14 +18,17 @@
       method: 'POST',
       body: JSON.stringify(formData)
     });
-    
-    if (res.type === 'success') {
+
+    if (res.status === 200) {
       await invalidateAll();
       toast.success('Successfully saved a note!')
-      goto('/');
+      setTimeout(() => {
+        goto('/');
+      }, 1000);
+    } else {
+      toast.error('Whoopsie! something went wrong.')
     }
 
-    applyAction(res);
   }
 </script>
 
@@ -40,7 +42,7 @@
       <input type="password" name="password" id="password" placeholder="Password*" required  bind:value={password}>
     </div>
     <input type="text" name="passwordhint" id="passwordhint" placeholder="Password Hint"  bind:value={passwordHint}>
-    <textarea name="comments" id="comments" cols="30" rows="10" placeholder="Notes/Comments"  bind:value={comments}></textarea>
+    <textarea name="comments" id="comments" cols="30" rows="4" placeholder="Notes/Comments"  bind:value={comments}></textarea>
     <button type='submit'>Submit</button>
   </form>
 </div>

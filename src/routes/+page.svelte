@@ -20,26 +20,32 @@
   }
 </script>
 
-<div id="notes" class:isIsolating={isIsolated !== undefined}>
-  {#each data.notes as note, i (note.id) }
-    <div class="note" data-id={note.id} class:isIsolated={isIsolated === note.id}>
-      <div class="isolation">
-        <input data-id={note.id} type="checkbox" name="isolated" id="isolated-{note.id}" on:change={onIsolate}>
-        <label for="isolated-{note.id}">Isolate</label>
-      </div>
-      <div class="qr-code">
-        {#if browser }
-          <a href={`/notes/${note.id}`}>
-            <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${window.location.origin}/notes/${note.id}`} alt={note.title} />
-          </a>
-        {/if}
-      </div>
-      <div class="note-title">
-        <p>{i + 1}. {note.title}<br><span class="note-url">{note.url}</span></p>
-      </div>
+  {#if data.notes.length > 0 }
+  
+    <div id="notes" class:isIsolating={isIsolated !== undefined}>
+      {#each data.notes as note, i (note.id) }
+        <div class="note" data-id={note.id} class:isIsolated={isIsolated === note.id}>
+          <div class="isolation">
+            <input data-id={note.id} type="checkbox" name="isolated" id="isolated-{note.id}" on:change={onIsolate}>
+            <label for="isolated-{note.id}">Isolate</label>
+          </div>
+          <div class="qr-code">
+            {#if browser }
+              <a href={`/notes/${note.id}`}>
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${window.location.origin}/notes/${note.id}`} alt={note.title} />
+              </a>
+            {/if}
+          </div>
+          <div class="note-title">
+            <p>{i + 1}. {note.title}<br><span class="note-url">{note.url}</span></p>
+          </div>
+        </div>
+      {/each}
     </div>
-  {/each}
-</div>
+
+  {:else}
+    <p>Looks like you don't have any saved logins yet...</p>
+  {/if}
 
 <style lang="postcss">
   #notes {
