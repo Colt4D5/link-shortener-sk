@@ -2,13 +2,16 @@
   import { setCookie } from '$lib/utils';
   import { invalidateAll, goto } from '$app/navigation';
   import toast from 'svelte-french-toast';
-  // export let data;
-  // console.log(data);
 
   let username;
   let password;
 
   const handleLogin = async (e) => {
+    if (!username || !password) {
+      toast.error('You must fill out both fields');
+      return;
+    }
+
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
@@ -24,6 +27,10 @@
       toast.success('Welcome back!')
       invalidateAll();
       goto('/');
+    } else if (formData.status === 404) {
+      toast.error('Your login credentials are incorrect');
+    } else {
+      toast.error('Whoops! Something went wrong.')
     }
   }
 </script>

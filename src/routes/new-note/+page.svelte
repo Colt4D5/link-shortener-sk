@@ -12,6 +12,11 @@
 
   async function handleSubmit() {
 
+    if (!title || !url || !username || !password) {
+      toast.error('Please fill out all required fields');
+      return;
+    }
+
     const formData = { user: data.user, title, url, username, password, passwordHint, comments }
 
     const res = await fetch('/api/links/create-new', {
