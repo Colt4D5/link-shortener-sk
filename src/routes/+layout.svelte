@@ -17,3 +17,9 @@
     <slot></slot>
   </div>
 </main>
+
+<style lang="postcss">
+  main {
+    padding-block: 4rem;
+  }
+</style>

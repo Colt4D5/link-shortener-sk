@@ -77,6 +77,7 @@
       border-radius: 0.5rem;
       text-align: center;
       transition: opacity 0.5s ease;
+      box-shadow: 3px 4px 6px 2px rgb(0 0 0 / 0.15);
       & .isolation {
         margin-bottom: 1rem;
       }
